@@ -1,5 +1,6 @@
 import requests
 import base64
+import json
 
 #define these from user client
 password = b"Oj0rXeMWm9CbgfvNRIrweg"
@@ -14,10 +15,20 @@ header = {'Authorization' : auth}
 summoner = API + '/lol-summoner/v1/current-summoner'
 r = requests.get(summoner, headers=header, verify=False)
 
-def setNewPage():
+
+def getCurrentChampion(API, header):
+    
+    pass
+
+def setNewPage(API, header):
+    new_page = json.dumps({"name":"Ponita", "primaryStyleId":8300, "subStyleId":8400, "selectedPerkIds": [8351,8313,8345,8347,8451,8444,5007,5002,5001], "current":"true" })
+    set_page = API + '/lol-perks/v1/pages'
+    r = requests.post(set_page, headers=header, verify=False, data=new_page)
+    print(r.status_code)
+    print(r.headers)
 
 
-def deleteCurrentPage(API, headers):
+def deleteCurrentPage(API, header):
     #define current rune page and put into current_page; returns status 200
     get_current_page = API + '/lol-perks/v1/currentpage'
     r = requests.get(get_current_page, headers=header, verify=False)
@@ -32,4 +43,5 @@ def deleteCurrentPage(API, headers):
 # Accessing the LCU API
 
 
-deleteCurrentPage(API, headers)
+#deleteCurrentPage(API, header)
+setNewPage(API, header)
