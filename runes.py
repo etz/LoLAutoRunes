@@ -15,13 +15,21 @@ header = {'Authorization' : auth}
 summoner = API + '/lol-summoner/v1/current-summoner'
 r = requests.get(summoner, headers=header, verify=False)
 
+#test rune pages
+champion = "Wukong"
+primary = 8300
+secondary = 8400
+runes = [8351,8313,8345,8347,8451,8444,5007,5002,5001]
+current = "true"
+
 
 def getCurrentChampion(API, header):
-    
+
     pass
 
-def setNewPage(API, header):
-    new_page = json.dumps({"name":"Ponita", "primaryStyleId":8300, "subStyleId":8400, "selectedPerkIds": [8351,8313,8345,8347,8451,8444,5007,5002,5001], "current":"true" })
+def setNewPage(API, header, champion, primary, secondary, runes=[], current="true"):
+
+    new_page = json.dumps({"name":"{}".format(champion), "primaryStyleId":primary, "subStyleId":secondary, "selectedPerkIds": runes, "current":"{}".format(current) })
     set_page = API + '/lol-perks/v1/pages'
     r = requests.post(set_page, headers=header, verify=False, data=new_page)
     print(r.status_code)
@@ -44,4 +52,4 @@ def deleteCurrentPage(API, header):
 
 
 #deleteCurrentPage(API, header)
-setNewPage(API, header)
+setNewPage(API, header, champion, primary, secondary, runes, current)
