@@ -52,9 +52,8 @@ def findRuneID(runeIDs, runeName):
     return runeIDs[runeName]
 
 
-def nameToID(runes, shards):
+def nameToID(runes, shards, runeIDs):
     rune_ids = []
-
     for i in range(0,len(runes)):
         rune = findRuneID(runeIDs, runes[i])
         rune_ids.append(rune)

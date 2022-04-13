@@ -143,7 +143,7 @@ for char in champion_name:
 runes, shards = getRunesUGG(champion, gamemode)
 
 """Parse rune names to ids"""
-rune_ids = nameToID(runes,shards)
+rune_ids = nameToID(runes, shards, runeIDs)
 
 """Get primary and sub ids"""
 primary = findPageID(pageIDs, runes[0])

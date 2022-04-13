@@ -10,12 +10,12 @@ def getRunesUGG(champion, gamemode):
     shards = [] #3 shards
 
     #get runes based on gamemode
-    if gamemode == "CLASSIC":
-        URL = 'https://u.gg/lol/champions/' + champion + '/build'
-    elif gamemode == "ARAM":
+    if gamemode == "ARAM":
         URL = 'https://u.gg/lol/champions/aram/' + champion + '-aram'
     elif gamemode == "ONEFORALL":
         URL = 'https://u.gg/lol/champions/one-for-all/' + champion + '-one-for-all'
+    else:
+        URL = 'https://u.gg/lol/champions/' + champion + '/build'
 
 
     r = requests.get(URL)
