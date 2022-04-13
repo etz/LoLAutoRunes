@@ -8,8 +8,8 @@ from runeparser import *
 
 
 #define these from user client <lockfile or process list>
-password = b"0tbIC9ZD5ln58mnxTaYBIw"
-port = 61857
+password = b"18m0Pn0KoDzB2CiXie4iRQ"
+port = 63776
 
 #prepare LCU connection
 API = 'https://127.0.0.1:' + str(port)
@@ -82,14 +82,22 @@ def getRunePages(API, header):
 
 """Parse runesReforged.json"""
 pageIDs, runeIDs = parseRunes()
+
 """Determine if in match"""
 
 """Determine gamemode"""
 gamemode = "rift"
+
 """Determine selected champion"""
-champion = getCurrentChampionName(API, header)
+champion_name = getCurrentChampionName(API, header)
+champion = ""
+for char in champion_name:
+    if char.isalpha():
+        champion += char
+
 """Fetch runes"""
 runes, shards = getRunesUGG(champion, gamemode)
+
 """Parse rune names to ids"""
 rune_ids = []
 
@@ -100,8 +108,6 @@ for i in range(0,len(runes)):
 for i in range(0,len(shards)):
     shard = findShardID(runeIDs, shards[i])
     rune_ids.append(shard)
-
-print(rune_ids)
 
 """Get primary and sub ids"""
 primary = findPageID(pageIDs, runes[0])
