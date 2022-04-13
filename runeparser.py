@@ -1,9 +1,6 @@
-import json
-
-
 #parseRunes() - take runesReforged.json and parses to pageIDs, runeIDs; two dicts that contain all runes associated with each 'class', and each rune associated with its ID
-def parseRunes():
-    f = open('runesReforged.json', 'r')
+def parseRunes(rr_json):
+    f = open(rr_json, 'r')
     runesReforged = json.load(f)
     f.close()
 
@@ -52,9 +49,33 @@ def findRuneID(runeIDs, runeName):
     return runeIDs[runeName]
 
 
+def nameToID(runes, shards):
+    rune_ids = []
+
+    for i in range(0,len(runes)):
+        rune = findRuneID(runeIDs, runes[i])
+        rune_ids.append(rune)
+
+    for i in range(0,len(shards)):
+        shard = findShardID(runeIDs, shards[i])
+        rune_ids.append(shard)
+    return rune_ids
+
 def findShardID(shardIDs, shardName):
     shards = {'Adaptive Force':5008, 'Attack Speed':5005, 'Ability Haste':5007, 'Armor':5002, 'Magic Resist':5003, 'Health':5001}
     return shards[shardName]
+
+def downloadNewIDs(client_version):
+    URL = 'https://ddragon.leagueoflegends.com/cdn/' + client_version + '/data/en_US/runesReforged.json'
+    r = requests.get(URL)
+    if r.status_code == 200:
+        file_name = client_version + '-runesReforged.json'
+        f = open(file_name, 'w')
+        f.write(r.text)
+        f.close()
+        return 1
+    else:
+        return 0
 
 #example run
 #pageIDs, runeIDs = parseRunes()
