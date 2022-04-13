@@ -16,8 +16,7 @@ header = {'Authorization' : auth}
 #champion = "Tukong"
 
 
-
-
+###################   Champion Data   #######################
 #getCurrentChampionID(API, header): Returns ID for the champion locked in; returns int
 def getCurrentChampionID(API, header):
     get_champion_id = API + "/lol-champ-select/v1/current-champion" #returns 404 if not selected, 200 if so
@@ -36,6 +35,7 @@ def getCurrentChampionName(API, header):
     get_champion_name = r.json()
     return get_champion_name['name']
 
+###################   Rune Page Data   #######################
 #setNewRunePage(API, header, champion, primary, secondary, runes=[], current="true"); returns success or error
 def setNewRunePage(API, header, champion, primary, secondary, runes=[], current="true"):
     print("Creating new page for " + champion)
@@ -47,7 +47,7 @@ def setNewRunePage(API, header, champion, primary, secondary, runes=[], current=
         pass
     print("Success")
 
-
+#getCurrentRunePage(API, header); returns current rune page ID
 def getCurrentRunePage(API, header):
     #get current rune page id
     get_current_page = API + '/lol-perks/v1/currentpage'
@@ -55,6 +55,7 @@ def getCurrentRunePage(API, header):
     current_page = r.json()
     return str(current_page['id'])
 
+#getCurrentRunePage(API, header); returns nothing, deletes the current rune page
 def deleteCurrentRunePage(API, header):
     #define current rune page and put into current_page
     current_page = getCurrentRunePage(API, header)
@@ -62,10 +63,12 @@ def deleteCurrentRunePage(API, header):
     del_current_page = API + '/lol-perks/v1/pages/' + current_page
     r = requests.delete(del_current_page, headers=header, verify=False) #returns 204
 
+#deleteRunePage(API, header, page); returns nothing, deletes a specific rune page based on ID
 def deleteRunePage(API, header, page):
     #delete current rune page by ID
     del_page = API + '/lol-perks/v1/pages/' + page
     r = requests.delete(del_page, headers=header, verify=False) #returns 204
+
 
 def getRunePages(API, header):
     pass
@@ -73,6 +76,10 @@ def getRunePages(API, header):
 
 
 # Main function
+f = open('runesReforged.json', 'r')
+runesReforged = json.load(f)
+f.close()
+
 
 champion = getCurrentChampionName(API, header)
 primary = 8300
