@@ -7,17 +7,41 @@ from runescraper import *
 from runeparser import *
 
 
-#define these from user client <lockfile or process list>
-password = b"18m0Pn0KoDzB2CiXie4iRQ"
-port = 63776
+###################   API Data   #######################
+#parseLockFileWin(path=r"") - takes an absolute path to parse lockfile, otherwise check common install locations. returns port, b'password'
+def parseLockFileWin(path=r""):
+    if path != r"":
+        try:
+            with open(drive+location, 'r') as f:
+                lockfile = f.readline()
+                lockfile = lockfile.split(':')
+                return lockfile[2], bytes(lockfile[3], 'utf-8') #return port, password
+        except:
+            print("Installation location not found" + drive + location)
+            return 0 #if location does not work
+    user_drives = [r'C:',r'D:',r'E:',r'F:']
+    install_locations = [r'\Riot Games\League of Legends\lockfile', r'\Program Files\Riot Games\League of Legends\lockfile', r'\Program Files (x86)\Riot Games\League of Legends\lockfile']
+    for drive in user_drives:
+        for location in install_locations:
+            try:
+                with open(drive+location, 'r') as f:
+                    lockfile = f.readline()
+                    lockfile = lockfile.split(':')
+                    return lockfile[2], bytes(lockfile[3], 'utf-8') #return port, password
+            except:
+                print("Installation is not located at: " + drive + location)
+    return 0 #if location not found
 
-#prepare LCU connection
-API = 'https://127.0.0.1:' + str(port)
-auth = 'Basic ' + base64.b64encode(b'riot:' + password).decode('utf-8')
-header = {'Authorization' : auth}
+#parseLockFileMac(path=r"") - takes an absolute path to parse lockfile, otherwise check common install locations. returns port, b'password'
+def parseLockFileMac(path=r""):
+    pass
 
-
-
+#parseAPIData(port, password) - takes port, b'password' and parses LCU API data
+def parseAPIData(port, password):
+    API = 'https://127.0.0.1:' + str(port)
+    auth = 'Basic ' + base64.b64encode(b'riot:' + password).decode('utf-8')
+    header = {'Authorization' : auth}
+    return API, auth, header
 
 ###################   Champion Data   #######################
 #getCurrentChampionID(API, header): Returns ID for the champion locked in; returns int
@@ -89,8 +113,18 @@ def getGameMode(API, header):
 
 # Main function
 
+"""Connect to LCU API"""
+port, password = parseLockFileWin()
+API, auth, header = parseAPIData()
+
+"""Get current client version"""
+#TBD
+
+"""Check against downloaded runesReforged.json"""
+#TBD
+
 """Parse runesReforged.json"""
-pageIDs, runeIDs = parseRunes()
+pageIDs, runeIDs = parseRunes('12.7.1-runesReforged.json') #Add auto-updater
 
 """Determine if in match"""
 
@@ -109,20 +143,14 @@ for char in champion_name:
 runes, shards = getRunesUGG(champion, gamemode)
 
 """Parse rune names to ids"""
-rune_ids = []
-
-for i in range(0,len(runes)):
-    rune = findRuneID(runeIDs, runes[i])
-    rune_ids.append(rune)
-
-for i in range(0,len(shards)):
-    shard = findShardID(runeIDs, shards[i])
-    rune_ids.append(shard)
+rune_ids = nameToID(runes,shards)
 
 """Get primary and sub ids"""
 primary = findPageID(pageIDs, runes[0])
 secondary = findPageID(pageIDs, runes[5])
+
 """Delete current rune page"""
 deleteCurrentRunePage(API, header)
+
 """Create new rune page with fetched runes"""
 setNewRunePage(API, header, gamemode, champion_name, primary, secondary, rune_ids, current="true")
