@@ -12,8 +12,7 @@ API = 'https://127.0.0.1:' + str(port)
 auth = 'Basic ' + base64.b64encode(b'riot:' + password).decode('utf-8')
 header = {'Authorization' : auth}
 
-#new rune page data <get from u.gg/op.gg/etc>
-#champion = "Tukong"
+
 
 
 ###################   Champion Data   #######################
@@ -76,9 +75,27 @@ def getRunePages(API, header):
 
 
 # Main function
-f = open('runesReforged.json', 'r')
-runesReforged = json.load(f)
-f.close()
+
+"""Determine if Runes Json has already been parsed"""
+
+"""Read in Runes dict and Pages dict"""
+
+"""Determine if in match"""
+
+"""Determine gamemode"""
+
+"""Determine selected champion"""
+
+"""Fetch runes"""
+
+"""Parse rune names to ids"""
+
+"""Get primary and sub ids"""
+
+"""Delete current rune page"""
+
+"""Create new rune page with fetched runes"""
+
 
 
 champion = getCurrentChampionName(API, header)

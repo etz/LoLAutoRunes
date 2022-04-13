@@ -11,7 +11,7 @@ def parseRunes():
     runeIDs = {} #associate each rune name to the rune ID
 
     # search each rune in a specific class (Precision, Domination, ... )
-    for i in range(0,4):
+    for i in range(0,5):
         primary_id = runesReforged[i]['id'] #get pageIDs for each class
         rune_names = [] #list for all rune names in a particular class
 
@@ -41,7 +41,7 @@ pageIDs, runeIDs = parseRunes()
 #print(runeIDs)
 f = open('runeIDs.txt', 'w+')
 f.write(json.dumps(runeIDs))
-f.write("\n")
+f.write("\n\n")
 f.write(json.dumps(pageIDs))
 f.close()
 
