@@ -8,4 +8,4 @@ Startup:
 
 Rune selection:
 - Add web scrape to determine necessary runes
-- Map rune names to rune IDs
+- Map rune names to rune IDs DONE
