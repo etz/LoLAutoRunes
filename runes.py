@@ -115,7 +115,7 @@ def getGameMode(API, header):
 
 """Connect to LCU API"""
 port, password = parseLockFileWin()
-API, auth, header = parseAPIData()
+API, auth, header = parseAPIData(port, password)
 
 """Get current client version"""
 #TBD

@@ -1,6 +1,9 @@
+import json
+import requests
+
 #parseRunes() - take runesReforged.json and parses to pageIDs, runeIDs; two dicts that contain all runes associated with each 'class', and each rune associated with its ID
 def parseRunes(rr_json):
-    f = open(rr_json, 'r')
+    f = open('12.7.1-runesReforged.json', 'r')
     runesReforged = json.load(f)
     f.close()
 
