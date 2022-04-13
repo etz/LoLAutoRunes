@@ -9,8 +9,15 @@ def getRunesUGG(champion, gamemode):
     runes = [] #6 runes
     shards = [] #3 shards
 
-    #get u.gg runes page
-    URL = 'https://u.gg/lol/champions/' + champion + '/build'
+    #get runes based on gamemode
+    if gamemode == "CLASSIC":
+        URL = 'https://u.gg/lol/champions/' + champion + '/build'
+    elif gamemode == "ARAM":
+        URL = 'https://u.gg/lol/champions/aram/' + champion + '-aram'
+    elif gamemode == "ONEFORALL":
+        URL = 'https://u.gg/lol/champions/one-for-all/' + champion + '-one-for-all'
+
+
     r = requests.get(URL)
 
     if r.status_code != 200:
@@ -45,6 +52,11 @@ def getRunesUGG(champion, gamemode):
     #shard text manipulation
     for i in range(0,len(shards)):
         shards[i] = shards[i][4:-6]
+        if shards[i] == 'Scaling Bonus Health':
+            shards[i] == 'Health'
+        elif shards[i] == 'Scaling CDR':
+            shards[i] == 'Ability Haste'
+
 
 
     return runes, shards

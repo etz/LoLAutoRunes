@@ -40,15 +40,18 @@ def getCurrentChampionName(API, header):
 
 ###################   Rune Page Data   #######################
 #setNewRunePage(API, header, champion, primary, secondary, runes=[], current="true"); returns success or error
-def setNewRunePage(API, header, champion, primary, secondary, runes=[], current="true"):
+def setNewRunePage(API, header, gamemode, champion, primary, secondary, runes=[], current="true"):
     print("Creating new page for " + champion)
-    new_page = json.dumps({"name":"AR {}".format(champion), "primaryStyleId":primary, "subStyleId":secondary, "selectedPerkIds": runes, "current":"{}".format(current) })
+    gamemode = "{} {}".format(gamemode.capitalize(), champion)
+    if len(gamemode) > 25:
+        gamemode = gamemode[0:24]
+    new_page = json.dumps({"name":gamemode, "primaryStyleId":primary, "subStyleId":secondary, "selectedPerkIds": runes, "current":"{}".format(current) })
     set_page = API + '/lol-perks/v1/pages'
     r = requests.post(set_page, headers=header, verify=False, data=new_page) #returns 200
     if(r.status_code != 200):
         print("Error generating new page, is there already maximum rune pages?")
-        pass
-    print("Success")
+    else:
+        print("Success")
 
 #getCurrentRunePage(API, header); returns current rune page ID
 def getCurrentRunePage(API, header):
@@ -72,9 +75,15 @@ def deleteRunePage(API, header, pageID):
     del_page = API + '/lol-perks/v1/pages/' + pageID
     r = requests.delete(del_page, headers=header, verify=False) #returns 204
 
-
 def getRunePages(API, header):
     pass
+
+###################   Lobby Data   #######################
+def getGameMode(API, header):
+    get_game_mode = API + '/lol-lobby/v2/lobby'
+    r = requests.get(get_game_mode, headers=header, verify=False) #returns 200
+    r = r.json()
+    return r['gameConfig']['gameMode']
 
 
 
@@ -86,7 +95,8 @@ pageIDs, runeIDs = parseRunes()
 """Determine if in match"""
 
 """Determine gamemode"""
-gamemode = "rift"
+gamemode = getGameMode(API, header)
+
 
 """Determine selected champion"""
 champion_name = getCurrentChampionName(API, header)
@@ -115,4 +125,4 @@ secondary = findPageID(pageIDs, runes[5])
 """Delete current rune page"""
 deleteCurrentRunePage(API, header)
 """Create new rune page with fetched runes"""
-setNewRunePage(API, header, champion, primary, secondary, rune_ids, current="true")
+setNewRunePage(API, header, gamemode, champion_name, primary, secondary, rune_ids, current="true")

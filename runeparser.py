@@ -53,7 +53,7 @@ def findRuneID(runeIDs, runeName):
 
 
 def findShardID(shardIDs, shardName):
-    shards = {'Adaptive Force':5008, 'Attack Speed':5005, 'Scaling CDR':5007, 'Armor':5002, 'Magic Resist':5003, 'Health':5001}
+    shards = {'Adaptive Force':5008, 'Attack Speed':5005, 'Ability Haste':5007, 'Armor':5002, 'Magic Resist':5003, 'Health':5001}
     return shards[shardName]
 
 #example run
