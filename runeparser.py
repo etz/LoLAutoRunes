@@ -1,5 +1,7 @@
 import json
 
+
+#parseRunes() - take runesReforged.json and parses to pageIDs, runeIDs; two dicts that contain all runes associated with each 'class', and each rune associated with its ID
 def parseRunes():
     f = open('runesReforged.json', 'r')
     runesReforged = json.load(f)
@@ -28,22 +30,41 @@ def parseRunes():
                     rune_id = runesReforged[i]['slots'][j]['runes'][k]['id']
                     runeIDs[rune_name] = rune_id
                 except Exception as e:
-                    print("ERROR: {},{},{} -- ".format(i,j,k) + str(e))
-                    #print(str(i) + "," + str(j) + "," + str(k) + " does not exist!")
-                    #continue
+                    #print("ERROR: {},{},{} -- ".format(i,j,k) + str(e))
+                    continue
 
         #runeIDs.append(rune_page)
         pageIDs.append({primary_id:rune_names})
     return pageIDs, runeIDs
 
-pageIDs, runeIDs = parseRunes()
+#findPageID(pageIDs, runeName) - given the dict of id:runes and the rune name, return the page id as an int
+def findPageID(pageIDs, runeName):
+    total_pages = len(pageIDs)
+    for i in range(0,total_pages):
+        key = list(pageIDs[i].keys())[0]
+        for rune in pageIDs[i][key]:
+            if runeName == rune:
+                return int(key)
 
-#print(runeIDs)
-f = open('runeIDs.txt', 'w+')
-f.write(json.dumps(runeIDs))
-f.write("\n\n")
-f.write(json.dumps(pageIDs))
-f.close()
 
-def findPrimaryPage(runeName):
-    pass
+#findRuneID(runeIDs, runeName) - given the dict of runes:id and the rune name, return the id as an int
+def findRuneID(runeIDs, runeName):
+    return runeIDs[runeName]
+
+
+def findShardID(shardIDs, shardName):
+    shards = {'Adaptive Force':5008, 'Attack Speed':5005, 'Ability Haste':5007, 'Armor':5002, 'Magic Resist':5003, 'Health':5001}
+    return shards[shardName]
+
+#example run
+#pageIDs, runeIDs = parseRunes()
+#primary_page = findPageID(pageIDs, "Electrocute") #returns 8100
+#rune_id1 = findRuneID(runeIDs, "Predator") #returns 8124
+
+
+#output files to runeIDs.txt
+#f = open('runeIDs.txt', 'w+')
+#f.write(json.dumps(runeIDs))
+#f.write("\n\n")
+#f.write(json.dumps(pageIDs))
+#f.close()

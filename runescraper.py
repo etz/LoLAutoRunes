@@ -50,7 +50,5 @@ def getRunesUGG(champion, gamemode):
     return runes, shards
 
 
-
-runes, shards = getRunesUGG('illaoi', 'rift')
-print(runes)
-print(shards)
+# example run
+# runes, shards = getRunesUGG('illaoi', 'rift')

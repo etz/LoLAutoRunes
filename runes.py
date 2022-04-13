@@ -3,9 +3,13 @@ import base64
 import json
 import time
 
+from runescraper import *
+from runeparser import *
+
+
 #define these from user client <lockfile or process list>
-password = b"Oj0rXeMWm9CbgfvNRIrweg"
-port = 55886
+password = b"0tbIC9ZD5ln58mnxTaYBIw"
+port = 61857
 
 #prepare LCU connection
 API = 'https://127.0.0.1:' + str(port)
@@ -63,9 +67,9 @@ def deleteCurrentRunePage(API, header):
     r = requests.delete(del_current_page, headers=header, verify=False) #returns 204
 
 #deleteRunePage(API, header, page); returns nothing, deletes a specific rune page based on ID
-def deleteRunePage(API, header, page):
+def deleteRunePage(API, header, pageID):
     #delete current rune page by ID
-    del_page = API + '/lol-perks/v1/pages/' + page
+    del_page = API + '/lol-perks/v1/pages/' + pageID
     r = requests.delete(del_page, headers=header, verify=False) #returns 204
 
 
@@ -76,33 +80,33 @@ def getRunePages(API, header):
 
 # Main function
 
-"""Determine if Runes Json has already been parsed"""
-
-"""Read in Runes dict and Pages dict"""
-
+"""Parse runesReforged.json"""
+pageIDs, runeIDs = parseRunes()
 """Determine if in match"""
 
 """Determine gamemode"""
-
+gamemode = "rift"
 """Determine selected champion"""
-
+champion = getCurrentChampionName(API, header)
 """Fetch runes"""
-
+runes, shards = getRunesUGG(champion, gamemode)
 """Parse rune names to ids"""
+rune_ids = []
+
+for i in range(0,len(runes)):
+    rune = findRuneID(runeIDs, runes[i])
+    rune_ids.append(rune)
+
+for i in range(0,len(shards)):
+    shard = findShardID(runeIDs, shards[i])
+    rune_ids.append(shard)
+
+print(rune_ids)
 
 """Get primary and sub ids"""
-
+primary = findPageID(pageIDs, runes[0])
+secondary = findPageID(pageIDs, runes[5])
 """Delete current rune page"""
-
-"""Create new rune page with fetched runes"""
-
-
-
-champion = getCurrentChampionName(API, header)
-primary = 8300
-secondary = 8400
-runes = [8351,8313,8345,8347,8451,8444,5007,5002,5001]
-current = "true"
-
 deleteCurrentRunePage(API, header)
-setNewRunePage(API, header, champion, primary, secondary, runes, current)
+"""Create new rune page with fetched runes"""
+setNewRunePage(API, header, champion, primary, secondary, rune_ids, current="true")

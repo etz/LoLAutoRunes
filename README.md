@@ -7,5 +7,5 @@ Startup:
 - Get LCU port & password from running client process
 
 Rune selection:
-- Add web scrape to determine necessary runes
+- Add web scrape to determine necessary runes DONE
 - Map rune names to rune IDs DONE
